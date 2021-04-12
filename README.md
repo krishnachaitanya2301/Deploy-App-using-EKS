@@ -20,8 +20,8 @@ Amazon EKS also requires a Virtual Private Cloud (VPC) to deploy the cluster. To
 Kubernetes uses a command line called Kubectl for communicating with kubernetes cluster. Amazon EKS clusters also require AWS IAM authentication for kubernetes to allow IAM authenticator for your kubenetes cluster.
 ###### Commands to install kubectl
      curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.19.6/2021-01-05/bin/linux/arm64/kubectl
-     now create Kubeconfig file for cluster with AWS CLI update-kubeconfig
-     now test configuration
+   now create Kubeconfig file for cluster with AWS CLI update-kubeconfig
+   now test configuration
 #### Step 4 Launch & Configure amazon EKS worker nodes
     1. Navigate to the AWS CloudFormation console and click on “Create stack” option
     2. On the “Select Template” page, select the option to “Specify an Amazon S3 template URL” and enter the URL
@@ -45,33 +45,33 @@ Watch the status of node till then to reach the ready state.
         apiVersion: extensions/v1beta1
         kind: Deployment
         metadata:
-          name: hello-world
+           name: hello-world
         spec:
-          replicas: 1 
-          template:
+           replicas: 1 
+           template:
              metadata:
                 labels:
                     app: hello-world
              spec:
                 containers:
-      - name: hello-world-pod
-        image: krishnachaitanya/helloworld-spring-boot:latest
-        ports: 
-        - containerPort: 80
-        - containerPort: 443
-        ---
-           apiVersion: v1
-            kind: Service
-            metadata:
-                 name: hello-world-service
-            spec:
-                 selector:
-                     app: hello-world 
-                 ports:
-                     - name: http
-                       protocol: TCP
-                       port: 80
-                       targetPort: 8080
+                    - name: hello-world-pod
+                      image: krishnachaitanya/helloworld-spring-boot:latest
+                      ports: 
+                         - containerPort: 80
+                         - containerPort: 443
+         ---
+          apiVersion: v1
+          kind: Service
+          metadata:
+              name: hello-world-service
+          spec:
+            selector:
+               app: hello-world 
+            ports:
+            - name: http
+              protocol: TCP
+              port: 80
+              targetPort: 8080
             type: LoadBalancer
   
 Save and Exit.
