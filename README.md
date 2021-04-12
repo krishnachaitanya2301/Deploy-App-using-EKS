@@ -26,7 +26,7 @@ Kubernetes uses a command line called Kubectl for communicating with kubernetes 
     1. Navigate to the AWS CloudFormation console and click on “Create stack” option
     2. On the “Select Template” page, select the option to “Specify an Amazon S3 template URL” and enter the URL
     3. Once stack creation is complete, select the stack name in the list of available stacks and select the “Outputs” section in the lower left pane.
-    4. Now create a file aws.yml, open it and add the following:
+    4. Now create a file aws.yaml, open it and add the following:
             apiVersion: v1
             kind: ConfigMap
             metadata:
@@ -40,6 +40,67 @@ Kubernetes uses a command line called Kubectl for communicating with kubernetes 
                     - system:bootstrappers
                     - system:nodes
 Watch the status of node till then to reach the ready state.
+#### Step 5 Deploy Simple hello world application
+    Create helloworld.yaml file and add the following:
+        apiVersion: extensions/v1beta1
+        kind: Deployment
+        metadata:
+          name: hello-world
+        spec:
+          replicas: 1 
+          template:
+             metadata:
+                labels:
+                    app: hello-world
+             spec:
+                containers:
+      - name: hello-world-pod
+        image: krishnachaitanya/helloworld-spring-boot:latest
+        ports: 
+        - containerPort: 80
+        - containerPort: 443
+        ---
+           apiVersion: v1
+            kind: Service
+            metadata:
+                 name: hello-world-service
+            spec:
+                 selector:
+                     app: hello-world 
+                 ports:
+                     - name: http
+                       protocol: TCP
+                       port: 80
+                       targetPort: 8080
+            type: LoadBalancer
+  
+Save and Exit.
+
+###### Now create nginx-svc.yaml file.
+        Open it and add the following.
+          apiVersion: v1
+            kind: Service
+            metadata:
+               name: nginx
+               labels:
+                 run: nginx
+            specs:
+               ports:
+                  - port : 80
+                    protocol : TCP
+               selector:
+                  run: nginx
+               type: LoadBalancer
+               
+###### Now check if the hello world application and nginx service is created or not by using following command:
+            Kubectl create -f helloworld.yaml
+            Kubectl create -f nginx-svc.yaml
+Both should be created.
+###### To check the nginx service you can give command
+            kubectl describe svc ngnix
+ by giving this command you will get load balancer ingress, copy that and paste the URL on browser.
+ ###### You will see output on the webpage
+            "hello world"
 
 
 
